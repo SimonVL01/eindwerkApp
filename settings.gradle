@@ -1,1 +1,3 @@
+rootProject.name = 'PhotoFilterAdvisor'
+
 include ':app'

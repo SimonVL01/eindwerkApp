@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,27 +7,45 @@
     android:orientation="vertical"
     tools:context="com.example.vdabcursist.photofilteradvisor.PhotoViewActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/useCamera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:fabSize="mini"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
     <ImageView
         android:id="@+id/profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/profile_pic"/>
+        android:src="@drawable/profile_pic"
+        android:scaleType="centerCrop"
+        />
 
-    <Button
-        android:id="@+id/buttonRequestPermission"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/vibrantView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Request Storage Permission"
-        android:layout_below="@id/profile"
-        android:layout_gravity="center" />
+        android:layout_alignParentTop="true"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/useCamera"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabBackground="@color/white"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Left" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Center"
+            />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Right" />
+    </android.support.design.widget.TabLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

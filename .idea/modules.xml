@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PhotoFilterAdvisor2.iml" filepath="$PROJECT_DIR$/PhotoFilterAdvisor2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PhotoFilterAdvisor.iml" filepath="$PROJECT_DIR$/PhotoFilterAdvisor.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
