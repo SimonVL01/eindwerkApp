@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,21 +44,34 @@ public class PhotoViewActivity extends AppCompatActivity {
         static final int REQUEST_IMAGE_CAPTURE = 1;
         private ImageView mImageView;
         private String mCurrentPhotoPath;
-        private TextView vibrantView;
-        private TabLayout useCam;
+
+        //private Camera camera;
+
+        private Button vibrantView;
+        private Button darkVibrantView;
+        private Button lightVibrantView;
+        private Button mutedView;
+        private Button darkMutedView;
+
+        private Bitmap bitmap;
+        private TabLayout menu;
+        private FloatingActionButton useCam;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view);
 
-        initViews();
+        if (savedInstanceState != null) {
+            bitmap = (Bitmap) savedInstanceState.getParcelable("BitmapImage");
+        }
+
         paintTextBackground();
 
         //Use of camera
 
-        useCam = (TabLayout) findViewById(R.id.useCamera);
-        useCam.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        menu = (TabLayout) findViewById(R.id.menu);
+        menu.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -71,7 +89,9 @@ public class PhotoViewActivity extends AppCompatActivity {
             }
         });
 
-            /*useCam.setOnClickListener(new View.OnClickListener() {
+            useCam = (FloatingActionButton) findViewById(R.id.useCamera);
+            //camera = new Camera(2, useCam);
+            useCam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (isCameraAccessAllowed()) {
@@ -82,20 +102,16 @@ public class PhotoViewActivity extends AppCompatActivity {
                     requestCameraPermission();
                 }
 
-            });*/
-
-
-            mImageView = (ImageView) findViewById(R.id.profile);
+            });
         }
 
-        /*public void onClickCamera(View v) {
-            if (isCameraAccessAllowed()) {
-                Toast.makeText(v.getContext(), "You already have the permission to access Camera", Toast.LENGTH_LONG).show();
-                dispatchTakePictureIntent();
-                return;
-            }
-            requestCameraPermission();
-        }*/
+        //Save Instance
+
+        @Override
+        protected void onSaveInstanceState(Bundle savedInstanceState) {
+            super.onSaveInstanceState(savedInstanceState);
+            savedInstanceState.putParcelable("BitmapImage", bitmap);
+        }
 
         //Asking Camera Permission
 
@@ -127,12 +143,6 @@ public class PhotoViewActivity extends AppCompatActivity {
             AlertDialog alertDialog = alertDialogBuilder.create();
 
             alertDialog.show();
-        }
-
-        //Asking External Storage permission
-
-        private void requestExStoragePermission() {
-
         }
 
         private boolean isCameraAccessAllowed() {
@@ -194,12 +204,6 @@ public class PhotoViewActivity extends AppCompatActivity {
             return image;
         }
 
-
-    public void onClickResults(View v) {
-        Intent intent = new Intent(this, ProductViewActivity.class);
-        startActivity(intent);
-    }
-
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
@@ -214,18 +218,27 @@ public class PhotoViewActivity extends AppCompatActivity {
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
+        bmOptions.inSampleSize = 4;
         BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         mImageView.setImageBitmap(bitmap);
+
+        paintTextBackground();
+
+    }
+
+    public void onClickResults(View v) {
+        Intent intent = new Intent(this, ProductViewActivity.class);
+        startActivity(intent);
     }
 
     //TabLayout
@@ -236,12 +249,7 @@ public class PhotoViewActivity extends AppCompatActivity {
                 Toast.makeText(this, "First tab is tapped", Toast.LENGTH_LONG).show();
                 break;
             case 1:
-                if (isCameraAccessAllowed()) {
-                    Toast.makeText(this, "You already have the permission to access Camera", Toast.LENGTH_LONG).show();
-                    dispatchTakePictureIntent();
-                    return;
-                }
-                requestCameraPermission();
+                Toast.makeText(this, "Second tab is tapped", Toast.LENGTH_LONG).show();
                 break;
             case 2:
                 Toast.makeText(this, "Third tab is tapped", Toast.LENGTH_LONG).show();
@@ -250,12 +258,18 @@ public class PhotoViewActivity extends AppCompatActivity {
 
     //Palette elements
 
-    private void initViews() {
-        vibrantView = (TextView) findViewById(R.id.vibrantView);
-    }
+        private void paintTextBackground() {
+        vibrantView = (Button) findViewById(R.id.vibrantView);
+        darkVibrantView = (Button) findViewById(R.id.darkvibrantView);
+        lightVibrantView = (Button) findViewById(R.id.lightvibrantView);
+        mutedView = (Button) findViewById(R.id.mutedView);
+        darkMutedView = (Button) findViewById(R.id.darkmutedView);
 
-    private void paintTextBackground() {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_pic);
+        mImageView = (ImageView) findViewById(R.id.profile);
+        //camera.setmImageView((ImageView) findViewById(R.id.profile));
+
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_pic);
+        Bitmap bitmap = ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
 
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
 
@@ -263,10 +277,66 @@ public class PhotoViewActivity extends AppCompatActivity {
             public void onGenerated(Palette palette) {
                 int defaultValue = 0x000000;
                 int vibrant = palette.getVibrantColor(defaultValue);
-                vibrantView.setBackgroundColor(vibrant);
-            }
-        });
+                int darkVibrant = palette.getDarkVibrantColor(defaultValue);
+                int lightVibrant = palette.getLightVibrantColor(defaultValue);
+                int muted = palette.getMutedColor(defaultValue);
+                int darkMuted = palette.getDarkMutedColor(defaultValue);
 
-    }
+                    vibrantView.setBackgroundColor(vibrant);
+                    darkVibrantView.setBackgroundColor(darkVibrant);
+                    lightVibrantView.setBackgroundColor(lightVibrant);
+                    mutedView.setBackgroundColor(muted);
+                    darkMutedView.setBackgroundColor(darkMuted);
+
+                    vibrantView.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getRGBvalues(vibrantView);
+                        }
+                    });
+
+                    darkVibrantView.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getRGBvalues(darkVibrantView);
+                        }
+                    });
+
+                    lightVibrantView.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getRGBvalues(lightVibrantView);
+                        }
+                    });
+
+                    mutedView.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getRGBvalues(mutedView);
+                        }
+                    });
+
+                    darkMutedView.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getRGBvalues(darkMutedView);
+                        }
+                    });
+
+                }
+            });
+        }
+
+        private void getRGBvalues(Button colButton) {
+
+            ColorDrawable buttonColor = (ColorDrawable) colButton.getBackground();
+            int color = buttonColor.getColor();
+            Toast.makeText(this, "Color: " + color, Toast.LENGTH_LONG).show();
+        }
 
 }

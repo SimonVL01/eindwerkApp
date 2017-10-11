@@ -12,40 +12,94 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/profile_pic"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/vibrantView"
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/useCamera"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/useCamera"
+        android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:tabMode="fixed"
         app:tabGravity="fill"
         app:tabBackground="@color/white"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentTop="true">
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Left" />
+            android:text="left" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Center"
-            />
+            android:text="center" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Right" />
+            android:text="right" />
     </android.support.design.widget.TabLayout>
 
+    <Button
+        android:id="@+id/vibrantView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:onClick="onGetRGBValues"/>
+
+    <Button
+        android:id="@+id/darkvibrantView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@id/vibrantView"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_alignStart="@id/vibrantView"
+        android:layout_alignLeft="@id/vibrantView"
+        android:onClick="onGetRGBValues"/>
+
+    <Button
+        android:id="@+id/lightvibrantView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@id/darkvibrantView"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_alignStart="@id/darkvibrantView"
+        android:layout_alignLeft="@id/darkvibrantView"
+        android:onClick="onGetRGBValues"/>
+
+    <Button
+        android:id="@+id/mutedView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@id/lightvibrantView"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_alignStart="@id/lightvibrantView"
+        android:layout_alignLeft="@id/lightvibrantView"
+        android:onClick="onGetRGBValues"/>
+
+    <Button
+        android:id="@+id/darkmutedView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@id/mutedView"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_alignStart="@id/mutedView"
+        android:layout_alignLeft="@id/mutedView"
+        android:onClick="onGetRGBValues"/>
 
 </RelativeLayout>

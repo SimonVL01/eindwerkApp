@@ -3,4 +3,5 @@
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
     <dimen name="margin_extra">48dp</dimen>
+    <dimen name="radius">50dp</dimen>
 </resources>
